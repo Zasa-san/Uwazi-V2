@@ -7,8 +7,10 @@ function App() {
       <head>
         <title>Uwazi UI v2</title>
       </head>
-      <Scripts />
-      <body />
+      <body>
+        <h1>Uwazi UI V2</h1>
+        <Scripts />
+      </body>
     </html>
   );
 }
