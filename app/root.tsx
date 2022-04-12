@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Links, Meta, Outlet, Scripts } from '@remix-run/react';
 import type { LinksFunction } from '@remix-run/node';
-import tailwindStylesheetUrl from './styles/bundled.css';
+import tailwindStylesheetUrl from './styles/bundled.module.css';
 
 const links: LinksFunction = () => [{ rel: 'stylesheet', href: tailwindStylesheetUrl }];
 
