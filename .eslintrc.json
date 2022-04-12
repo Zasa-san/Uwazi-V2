@@ -138,6 +138,7 @@
     "react/no-access-state-in-setstate": ["warn"],
     "react/jsx-pascal-case": ["warn"],
     "react/default-props-match-prop-types": ["error", { "allowRequiredDefaults": true }],
+    "react/function-component-definition": [2, { "namedComponents": "arrow-function" }],
 
     //jsx-a11y
     "jsx-a11y/anchor-is-valid": ["warn"],
