@@ -1,4 +1,6 @@
-node_modules
-build
-public
+/node_modules
+/build
+/public/build
 .cache
+.idea
+/app/styles/tailwind.css
