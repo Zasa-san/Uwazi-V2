@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Links, Meta, Outlet, Scripts } from '@remix-run/react';
 import type { LinksFunction } from '@remix-run/node';
 import tailwindStylesheetUrl from './styles/bundled.module.css';
+import { Navigation } from './components/common/Navigation/Navigation';
 
 const links: LinksFunction = () => [{ rel: 'stylesheet', href: tailwindStylesheetUrl }];
 
@@ -13,6 +14,7 @@ const App = () => (
       <Links />
     </head>
     <body className="h-full">
+      <Navigation />
       <Outlet />
       <Scripts />
     </body>
