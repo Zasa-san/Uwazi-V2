@@ -1,13 +1,9 @@
 import * as React from 'react';
 
 import { useLoaderData } from '@remix-run/react';
-import { Cards } from '../../components/library/cards';
+import { Cards } from '../../components/Cards/Cards';
 import { getEntities } from '../../services/entities';
 import { ErrorBoundary } from '../../components/common/error.boundary';
-//navbar
-//search
-//cards
-//sidepanel
 
 const loader = async () => getEntities();
 const meta = () => ({ title: 'Library Cards Uwazi' });
