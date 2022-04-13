@@ -8,8 +8,8 @@ const links: LinksFunction = () => [{ rel: 'stylesheet', href: tailwindStyleshee
 const App = () => (
   <html lang="es" className="h-full">
     <head>
-      <title>Uwazi UI v2</title>
       <Meta />
+      <title>Uwazi UI v2</title>
       <Links />
     </head>
     <body className="h-full">
