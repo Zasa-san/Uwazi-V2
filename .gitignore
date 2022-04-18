@@ -1,6 +1,7 @@
 .cache
 .idea
 .vscode
+.env
 /node_modules
 /build
 /public/build
