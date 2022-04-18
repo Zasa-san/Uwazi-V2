@@ -6,19 +6,20 @@ import { Cards } from '../../components/Cards/Cards';
 import { getEntities } from '../../services/entities';
 import { ErrorBoundary } from '../../components/common/ErrorHandling/error.boundary';
 import { requireUserId } from '../../session.server';
+import { Toolbar } from '../../components/Toolbar/Toolbar';
 
 const loader: LoaderFunction = async ({ request }) => {
+  console.log(request);
   const userId = await requireUserId(request);
-  console.log(userId);
   return getEntities();
 };
 
 const meta = () => ({ title: 'Library Cards Uwazi' });
 const Library = () => {
-  const { rows: entities, totalRows } = useLoaderData();
+  const { rows: entities } = useLoaderData();
   return (
     <main>
-      <div className="mx-auto mt-16 max-w-7xl text-center">Library home {totalRows}</div>
+      <Toolbar />
       <Cards entities={entities} />
     </main>
   );
