@@ -1,22 +1,13 @@
 import * as React from 'react';
-import { Form, useSubmit } from '@remix-run/react';
+import { Form } from '@remix-run/react';
 
-const SearchBar = () => {
-  const submit = useSubmit();
-
-  function handleChange(event) {
-    console.log(event.currentTarget);
-    submit(event.currentTarget, { replace: true });
-  }
-
-  return (
-    <Form className="border-solid border-2" onSubmit={handleChange}>
-      <label htmlFor="queryString" className="hidden">
-        Search in Library
-      </label>
-      <input type="text" id="queryString" placeholder="search" />
-    </Form>
-  );
-};
+const SearchBar = () => (
+  <Form className="border-solid border-2">
+    <label htmlFor="searchTerm" className="hidden">
+      Search in Library
+    </label>
+    <input name="searchTerm" type="text" placeholder="Search" />
+  </Form>
+);
 
 export { SearchBar };

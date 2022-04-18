@@ -11,7 +11,9 @@ import { Toolbar } from '../../components/Toolbar/Toolbar';
 const loader: LoaderFunction = async ({ request }) => {
   console.log(request);
   const userId = await requireUserId(request);
-  return getEntities();
+  const url = new URL(request.url);
+  const searchTerm = url.searchParams.toString();
+  return getEntities(searchTerm);
 };
 
 const meta = () => ({ title: 'Library Cards Uwazi' });
