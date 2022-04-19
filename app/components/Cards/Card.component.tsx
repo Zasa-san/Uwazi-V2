@@ -22,6 +22,7 @@ const Card = ({ entity }: { entity: EntityType }) => (
         #violation
       </span>
     </div>
+    <div>{entity.template}</div>
   </div>
 );
 
