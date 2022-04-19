@@ -7,13 +7,13 @@ import { Navigation } from './components/common/Navigation/Navigation';
 const links: LinksFunction = () => [{ rel: 'stylesheet', href: tailwindStylesheetUrl }];
 
 const App = () => (
-  <html lang="es" className="h-full">
+  <html lang="es">
     <head>
       <Meta />
       <title>Uwazi UI v2</title>
       <Links />
     </head>
-    <body className="h-full">
+    <body>
       <Navigation />
       <Outlet />
       <Scripts />

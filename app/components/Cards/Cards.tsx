@@ -7,10 +7,10 @@ const Cards = ({ entities }: { entities: EntityType[] }) =>
     // The map should not go on the 'Card' component, since its logic. But the divs have to wrap
     // the return of the map, and that is presentational.
     // How do we separate this?
-    <div className="flex mb-4 -mx-2">
+    <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-5">
       {entities.map((entity: EntityType) => (
         //'Card' could be a common component that could be reused somewhere else.
-        <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6 mb-4 px-2">
+        <div key={entity._id}>
           <Card entity={entity} />
         </div>
       ))}

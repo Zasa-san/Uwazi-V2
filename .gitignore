@@ -2,6 +2,7 @@
 .idea
 .vscode
 .env
+.history
 /node_modules
 /build
 /public/build

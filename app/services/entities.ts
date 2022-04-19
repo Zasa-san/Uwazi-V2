@@ -1,10 +1,9 @@
-import { json } from '@remix-run/node';
-
 const getEntities = async (searchTerm: string) => {
-  const res = await fetch(`http://localhost:3000/api/search?${searchTerm}`);
+  const url = `http://localhost:3000/api/search?${searchTerm}`;
+  const res = await fetch(url);
   if (res.ok) {
     const result = await res.json();
-    return json(result);
+    return result;
   }
   const error = new Error(`Error ${res.status}`);
   return Promise.reject(error);
