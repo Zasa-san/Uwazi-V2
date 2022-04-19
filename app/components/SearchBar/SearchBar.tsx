@@ -1,10 +1,12 @@
 import * as React from 'react';
-import { Form, useLoaderData } from '@remix-run/react';
+import { Form } from '@remix-run/react';
+import { useQueryParameters } from '../common/Hooks/useQueryParameters';
 
 const SearchBar = () => {
-  const { meta } = useLoaderData();
+  const { search, meta } = useQueryParameters(['searchTerm']);
+
   return (
-    <Form className="border-solid border-2">
+    <Form className="border-solid border-2" action={search}>
       <label htmlFor="searchTerm" className="hidden">
         Search in Library
       </label>

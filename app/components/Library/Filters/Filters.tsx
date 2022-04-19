@@ -1,24 +1,23 @@
-import { useFetcher, useLocation } from '@remix-run/react';
+import { Form } from '@remix-run/react';
 import React from 'react';
+import { useQueryParameters } from '../../common/Hooks/useQueryParameters';
 
 const Filters = () => {
-  const fetcher = useFetcher();
-  const { search } = useLocation();
+  const { search, meta } = useQueryParameters(['includeUnpublished']);
 
   return (
     <div>
       <h2 className="text-xl font-semibold">Filters</h2>
       <div className="mb-4 text-gray-500">General</div>
-      <fetcher.Form className="border-solid border-2" action={search}>
+      <Form className="border-solid border-2" action={search}>
         <label htmlFor="includeUnpublished">Include Unpublished</label>
         <input
           name="includeUnpublished"
           type="checkbox"
-          onChange={event => {
-            fetcher.submit(event.target.form, { replace: false });
-          }}
+          defaultChecked={meta.filters.includeUnpublished}
         />
-      </fetcher.Form>
+        <button type="submit">Filter!</button>
+      </Form>
     </div>
   );
 };
