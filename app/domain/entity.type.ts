@@ -1,9 +1,16 @@
 import { Key } from 'react';
+import { TemplateType } from './template.type';
+
+type EntityResponseType = {
+  _id: Key;
+  title: String;
+  template: string;
+};
 
 type EntityType = {
   _id: Key;
   title: String;
-  template: String;
+  template: TemplateType;
 };
 
-export { EntityType };
+export { EntityResponseType, EntityType };

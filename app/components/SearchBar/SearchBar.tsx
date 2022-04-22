@@ -6,7 +6,7 @@ const SearchBar = () => {
   const { search, meta } = useQueryParameters(['searchTerm']);
 
   return (
-    <Form className="border-solid border-2" action={search}>
+    <Form className="border-2 border-solid" action={search}>
       <label htmlFor="searchTerm" className="hidden">
         Search in Library
       </label>

@@ -8,6 +8,9 @@ import { ErrorBoundary } from '../../components/common/ErrorHandling/error.bound
 import { requireUserId } from '../../session.server';
 import { Toolbar } from '../../components/Toolbar/Toolbar';
 import { Filters } from '../../components/Library/Filters/Filters';
+import { EntityResponseType } from '../../domain/entity.type';
+import { getFromSession } from '../../file.session.server';
+import { TemplateType } from '../../domain/template.type';
 
 const loader: LoaderFunction = async ({ request }) => {
   await requireUserId(request);
@@ -15,8 +18,16 @@ const loader: LoaderFunction = async ({ request }) => {
   const searchTerm = url.searchParams.toString().replace('=on', '=false');
   const filtersEntries = Array.from(url.searchParams.entries());
   const filters = filtersEntries.reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
+
+  const templates = (await getFromSession<TemplateType[]>(request, 'templates')) || [];
+  const { rows: rawEntities } = await getEntities(searchTerm);
+  const entities = rawEntities.map((entity: EntityResponseType) => ({
+    ...entity,
+    template: templates.find((template: TemplateType) => template._id === entity.template),
+  }));
+
   return json({
-    rows: (await getEntities(searchTerm)).rows,
+    entities,
     meta: { filters },
   });
 };
@@ -24,11 +35,11 @@ const loader: LoaderFunction = async ({ request }) => {
 const meta = () => ({ title: 'Library Cards Uwazi' });
 
 const Library = () => {
-  const { rows: entities } = useLoaderData();
+  const { entities } = useLoaderData();
   return (
-    <div className="flex w-full">
+    <div className="flex w-full ">
       <div className="flex-col w-1/5 h-screen px-4 py-8 overflow-y-auto border-r">
-        <aside className="h-screen sticky absolute">
+        <aside className="absolute h-screen">
           <Filters />
         </aside>
       </div>
