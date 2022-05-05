@@ -7,14 +7,17 @@ import { useTranslation } from 'react-i18next';
 import tailwindStylesheetUrl from './styles/bundled.module.css';
 import { Navigation } from './components/common/Navigation/Navigation';
 import { i18n as i18nServer } from './ i18n.server';
+import { useTemplates } from './services/templates';
 
 const links: LinksFunction = () => [{ rel: 'stylesheet', href: tailwindStylesheetUrl }];
 
-type LoaderData = { locale: string };
+type LoaderData = { locale: string; templates: any };
 
-export const loader: LoaderFunction = async ({ request }) => {
+const loader: LoaderFunction = async ({ request }) => {
+  const { get } = useTemplates();
+  const templates = await get();
   const locale = await i18nServer.getLocale(request);
-  return json<LoaderData>({ locale });
+  return json<LoaderData>({ locale, templates });
 };
 
 const App = () => {
@@ -44,5 +47,5 @@ const App = () => {
   );
 };
 
-export { links };
+export { links, loader };
 export default App;

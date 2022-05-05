@@ -1,5 +1,5 @@
 import * as React from 'react';
-import ReactDOMServer, { renderToString } from 'react-dom/server';
+import { renderToString } from 'react-dom/server';
 import { EntryContext } from 'remix';
 import { RemixServer } from '@remix-run/react';
 

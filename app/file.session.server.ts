@@ -1,6 +1,5 @@
 import invariant from '@remix-run/react/invariant';
 import { createFileSessionStorage } from 'remix';
-import { useTemplates } from './services/templates';
 
 const path = require('path');
 
@@ -30,9 +29,9 @@ const initSession = async (request: Request) => {
   const cookie = request.headers.get('Cookie');
   if (!cookie) return null;
   const session = await fileSessionStorage.getSession(cookie);
-  if (!session.has('templates')) {
-    const templates = await useTemplates().get();
-    session.set('templates', templates);
+  if (!session.has('lengthyContent')) {
+    const lengthyContent = [{ content: 'very long text' }];
+    session.set('lengthyContent', lengthyContent);
 
     return fileSessionStorage.commitSession(session, {
       maxAge: 60 * 60 * 24 * 7, // 7 days
