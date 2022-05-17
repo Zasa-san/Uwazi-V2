@@ -4,7 +4,6 @@ import { json, redirect } from '@remix-run/node';
 
 import { Form, Link, useActionData, useSearchParams } from '@remix-run/react';
 import { verifyLogin } from '../../services/users';
-import { validateEmail } from '../../services/validators';
 import { createUserSession, getUserId } from '../../session.server';
 
 const loader: LoaderFunction = async ({ request }) => {
@@ -15,20 +14,24 @@ const loader: LoaderFunction = async ({ request }) => {
 
 interface ActionData {
   errors?: {
-    email?: string;
+    userName?: string;
     password?: string;
   };
 }
 
 const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
-  const email = formData.get('email');
+  const userName = formData.get('userName');
   const password = formData.get('password');
   const redirectTo = formData.get('redirectTo');
   const remember = formData.get('remember');
 
-  if (!validateEmail(email)) {
-    return json<ActionData>({ errors: { email: 'Email is invalid' } }, { status: 400 });
+  if (typeof userName !== 'string') {
+    return json<ActionData>({ errors: { password: 'User name is required' } }, { status: 400 });
+  }
+
+  if (userName.length < 3) {
+    return json<ActionData>({ errors: { password: 'Password is too short' } }, { status: 400 });
   }
 
   if (typeof password !== 'string') {
@@ -47,7 +50,8 @@ const action: ActionFunction = async ({ request }) => {
 
   return createUserSession({
     request,
-    userId: user.id,
+    userId: user._id,
+    user: user,
     remember: remember === 'on',
     redirectTo: typeof redirectTo === 'string' ? redirectTo : '/library',
   });
@@ -61,12 +65,12 @@ const LoginPage = () => {
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get('redirectTo') || '/library';
   const actionData = useActionData() as ActionData;
-  const emailRef = React.useRef<HTMLInputElement>(null);
+  const userNameRef = React.useRef<HTMLInputElement>(null);
   const passwordRef = React.useRef<HTMLInputElement>(null);
 
   React.useEffect(() => {
-    if (actionData?.errors?.email) {
-      emailRef.current?.focus();
+    if (actionData?.errors?.userName) {
+      userNameRef.current?.focus();
     } else if (actionData?.errors?.password) {
       passwordRef.current?.focus();
     }
@@ -77,24 +81,24 @@ const LoginPage = () => {
       <div className="w-full max-w-md px-8 mx-auto">
         <Form method="post" className="space-y-6">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-              Email address
+            <label htmlFor="userName" className="block text-sm font-medium text-gray-700">
+              User Name
             </label>
             <div className="mt-1">
               <input
-                ref={emailRef}
-                id="email"
+                ref={userNameRef}
+                id="userName"
                 required
-                name="email"
-                type="email"
-                autoComplete="email"
-                aria-invalid={actionData?.errors?.email ? true : undefined}
-                aria-describedby="email-error"
+                name="userName"
+                type="userName"
+                autoComplete="userName"
+                aria-invalid={actionData?.errors?.userName ? true : undefined}
+                aria-describedby="username-error"
                 className="w-full px-2 py-1 text-lg border border-gray-500 rounded"
               />
-              {actionData?.errors?.email && (
+              {actionData?.errors?.userName && (
                 <div className="pt-1 text-red-700" id="email-error">
-                  {actionData.errors.email}
+                  {actionData.errors.userName}
                 </div>
               )}
             </div>

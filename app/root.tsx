@@ -11,13 +11,13 @@ import { useTemplates } from './services/templates';
 
 const links: LinksFunction = () => [{ rel: 'stylesheet', href: tailwindStylesheetUrl }];
 
-type LoaderData = { locale: string; templates: any };
+type LoaderData = { locale: string; templates?: any };
 
 const loader: LoaderFunction = async ({ request }) => {
-  const { get } = useTemplates();
-  const templates = await get();
+  // const { get } = useTemplates();
+  // const templates = await get();
   const locale = await i18nServer.getLocale(request);
-  return json<LoaderData>({ locale, templates });
+  return json<LoaderData>({ locale });
 };
 
 const App = () => {
