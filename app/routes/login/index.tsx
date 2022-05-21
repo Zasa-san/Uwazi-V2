@@ -3,8 +3,8 @@ import type { ActionFunction, LoaderFunction, MetaFunction } from '@remix-run/no
 import { json, redirect } from '@remix-run/node';
 
 import { Form, Link, useActionData, useSearchParams } from '@remix-run/react';
-import { verifyLogin } from '../../services/users';
-import { createUserSession, getUserId } from '../../session.server';
+import { getUserId } from '../../session.server';
+import { post } from '../../services/apiClient';
 
 const loader: LoaderFunction = async ({ request }) => {
   const userId = await getUserId(request);
@@ -19,42 +19,39 @@ interface ActionData {
   };
 }
 
+const validateFields = (userName?: string, password?: string) => {
+  const errors: { [key: string]: string } = {};
+  if (typeof userName !== 'string') {
+    errors.userName = 'User name is required';
+  }
+  if (typeof password !== 'string') {
+    errors.password = 'Password is required';
+  }
+  return errors;
+};
+
 const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
   const userName = formData.get('userName');
   const password = formData.get('password');
-  const redirectTo = formData.get('redirectTo');
-  const remember = formData.get('remember');
 
-  if (typeof userName !== 'string') {
-    return json<ActionData>({ errors: { password: 'User name is required' } }, { status: 400 });
+  const errors = validateFields(userName, password);
+  if (Object.keys(errors).length > 0) return json<ActionData>({ errors }, { status: 400 });
+
+  const res = await post('login', { username: userName, password });
+
+  if (res.ok) {
+    request.headers.append('set-cookie', res.headers.get('set-cookie')!);
+    return redirect(`/login/session?redirectTo=${formData.get('redirectTo')}`, {
+      headers: {
+        'Set-Cookie': request.headers.get('set-cookie')!,
+      },
+    });
   }
-
-  if (userName.length < 3) {
-    return json<ActionData>({ errors: { password: 'Password is too short' } }, { status: 400 });
-  }
-
-  if (typeof password !== 'string') {
-    return json<ActionData>({ errors: { password: 'Password is required' } }, { status: 400 });
-  }
-
-  if (password.length < 8) {
-    return json<ActionData>({ errors: { password: 'Password is too short' } }, { status: 400 });
-  }
-
-  const user = await verifyLogin(email, password);
-
-  if (!user) {
-    return json<ActionData>({ errors: { email: 'Invalid email or password' } }, { status: 400 });
-  }
-
-  return createUserSession({
-    request,
-    userId: user._id,
-    user: user,
-    remember: remember === 'on',
-    redirectTo: typeof redirectTo === 'string' ? redirectTo : '/library',
-  });
+  return json<ActionData>(
+    { errors: { userName: 'Invalid user name or password' } },
+    { status: 400 }
+  );
 };
 
 const meta: MetaFunction = () => ({

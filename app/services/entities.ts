@@ -1,4 +1,4 @@
-import base64 from 'base-64';
+import { post } from './apiClient';
 
 const getEntities = async (searchTerm: string) => {
   const url = `http://localhost:3000/api/search?${searchTerm}`;
@@ -10,23 +10,14 @@ const getEntities = async (searchTerm: string) => {
   return Promise.reject(error);
 };
 
-const createEntity = async (formData: any) => {
-  const url = 'http://localhost:3000/api/entities';
-  const headers = new Headers();
-
-  formData.append('published', 'true');
-
-  headers.append('Authorization', `Basic${base64.encode('admin:admin')}`);
-  headers.append('X-Requested-With', 'XMLHttpRequest');
-  const res = await fetch(url, {
-    body: formData,
-    method: 'post',
-    headers,
-  });
+const createEntity = async (formData: any, request: any) => {
+  const data = { title: formData.get('title'), published: true };
+  const res = await post('entities', data, request);
   if (res.ok) {
     return res.json();
   }
   const error = new Error(`Error ${res.status}`);
   return Promise.reject(error);
 };
+
 export { getEntities, createEntity };

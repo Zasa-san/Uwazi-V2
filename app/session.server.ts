@@ -38,16 +38,6 @@ const getUserId = async (request: Request): Promise<string | undefined> => {
   return userId;
 };
 
-/* const getUser = async (request: Request): Promise<null | User> => {
-  const userId = await getUserId(request);
-  if (userId === undefined) return null;
-
-  const user = await getUserById(userId);
-  if (user) return user;
-
-  throw await logout(request);
-}; */
-
 const requireUserId = async (
   request: Request,
   redirectTo: string = new URL(request.url).pathname
@@ -60,29 +50,20 @@ const requireUserId = async (
   return userId;
 };
 
-/* const requireUser = async (request: Request) => {
-  const userId = await requireUserId(request);
-
-  const user = await getUserById(userId);
-  if (user) return user;
-
-  throw await logout(request);
-};
- */
-
 async function createUserSession({
   request,
-  userId,
+  user,
   remember,
   redirectTo,
 }: {
   request: Request;
-  userId: string;
+  user: { _id: string };
   remember: boolean;
   redirectTo: string;
 }) {
   const session = await getSession(request);
-  session.set(USER_SESSION_KEY, userId);
+  session.set(USER_SESSION_KEY, user._id);
+  session.set('user', user);
   return redirect(redirectTo, {
     headers: {
       'Set-Cookie': await sessionStorage.commitSession(session, {
