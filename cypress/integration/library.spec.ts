@@ -1,9 +1,15 @@
-describe('Login Test', () => {
-  it('should login', () => {
-    cy.visit('/login');
-    cy.get('#userName').type('admin');
-    cy.get('#password').type('admin');
-    cy.get('.space-y-6 > .px-4').click();
+describe('Library', () => {
+  before(() => {
+    cy.request({
+      url: '/login?index=&_data=routes/login/index',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      form: true,
+      body: { userName: 'admin', password: 'admin', redirectTo: '/library' },
+    });
+  });
+
+  it('should display entities', () => {
     cy.url().should('eq', 'http://localhost:3001/library');
   });
 });
